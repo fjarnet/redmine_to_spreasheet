@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Clever Redmine - Get issues</title>
+    <base target="_top">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script>
+      // Prevent forms from submitting.
+      function preventFormSubmit() {
+        var forms = document.querySelectorAll('form');
+        for (var i = 0; i < forms.length; i++) {
+          forms[i].addEventListener('submit', function(event) {
+            event.preventDefault();
+          });
+        }
+      }
+      window.addEventListener('load', preventFormSubmit);
+
+      function handleFormSubmit(formObject) {
+        updateDiv('loading ...');
+        google.script.run.withSuccessHandler(updateDiv).getIssuesForm(formObject);
+      }
+      function updateDiv(param) {
+        var div = document.getElementById('output');
+        div.innerHTML = param;
+      }
+      
+      
+        $(function () {
+            // Display logs from server into client console
+            // To be disabled in production mode ...
+            setInterval(function () {
+                google.script.run.withSuccessHandler(function (logs) {
+                    for (var id in logs) {
+                        console.log(logs[id]);
+                    }
+                }).popLogs();
+            }, 500);
+        });
+      
+    </script>
+  </head>
+  <body>
+  <div class="container">
+    <div class="row">
+    
+    <form id="myForm" onsubmit="handleFormSubmit(this)" class="col-md-12">
+    
+      <h3>Get Redmine issues</h3>
+    
+      <div class="form-group">
+        <label>Query</label>
+        <textarea name="query" rows="4" cols="30" class="form-control">limit=100&tracker_id=!6&status_id=!1&project_id=1</textarea><br>
+      </div>
+      
+      <div class="form-group">
+        <label>Start Date</label>
+        <input type="text" name="startdate" value="<?= Utilities.formatDate(subDaysFromDate(new Date(), 7), 'Europe/Paris', 'yyyy-MM-dd') ?>" class="form-control"><br>
+      </div>
+      
+      <div class="form-group">
+        <label>End Date</label>
+        <input type="text" name="enddate" value="<?= Utilities.formatDate(new Date(), 'Europe/Paris', 'yyyy-MM-dd') ?>" class="form-control"><br>
+      </div>
+      
+      <input type="submit" value="Let's go !" class="btn btn-primary" />
+    </form>
+    </div>
+    
+    <div class="row">
+      <div class="col-md-12">
+        <p id="output" class="bg-info"></p>
+      </div>
+    </div>
+    
+ </div>
+ 
+ </body>
+</html>
