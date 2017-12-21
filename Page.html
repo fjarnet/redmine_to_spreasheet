@@ -26,7 +26,6 @@
         div.innerHTML = param;
       }
       
-      
         $(function () {
             // Display logs from server into client console
             // To be disabled in production mode ...
@@ -38,6 +37,17 @@
                 }).popLogs();
             }, 500);
         });
+        
+      function updateConvertDiv(param) {
+        var div = document.getElementById('output-convert');
+        div.innerHTML = param;
+      }
+        
+      $(document).ready(function() {
+        $('#btn-convert').click(function() {
+          google.script.run.withSuccessHandler(updateConvertDiv).convertIssuesSpreadSheetsToRedmineTab();
+        });
+      });
       
     </script>
   </head>
@@ -65,12 +75,14 @@
       </div>
       
       <input type="submit" value="Let's go !" class="btn btn-primary" />
+      <input type="button" value="Convert" id="btn-convert" class="btn btn-success" />
     </form>
     </div>
     
     <div class="row">
       <div class="col-md-12">
         <p id="output" class="bg-info"></p>
+        <p id="output-convert" class="bg-info"></p>
       </div>
     </div>
     

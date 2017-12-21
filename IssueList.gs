@@ -135,3 +135,23 @@ function getIssuesList(query, start_date, end_date) {
   
   return issue_list;
 }
+
+function convertIssuesSpreadSheetsToRedmineTab() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sh = SpreadsheetApp.setActiveSheet(ss.getSheets()[0])
+  var col = 0 ; // choose the column you want to check: 0 = col A, 1= col B ...
+  var range = sh.getDataRange();
+  var values = range.getValues();// data is a 2D array, index0 = col A
+  
+  var redmineTxt = '';
+  values.forEach(function(line) {
+    line.forEach(function(cell) {
+      redmineTxt += ' | ' + cell;
+    });
+    redmineTxt += " | \n";
+  });
+  
+  log(redmineTxt);
+  
+  return 'Done ! Check your console.log() and copy & paste to Redmine';
+}
